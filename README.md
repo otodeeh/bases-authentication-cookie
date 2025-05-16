@@ -40,13 +40,11 @@ src/
 docker-compose up
 ```
 
-```bash
+
 Após isso, atualize seu arquivo .env com as informações de conexão.
 
 📦 Instalação e Execução
-bash
-Copy
-Edit
+```bash
 # Instale as dependências
 npm install
 
@@ -58,7 +56,7 @@ npx prisma migrate dev
 
 # Inicie a aplicação em modo de desenvolvimento
 npm run dev
-
+```
 🔐 Funcionalidades
 Autenticação com JWT (access + refresh)
 
@@ -77,11 +75,8 @@ POST	/auth/refresh	Gera novo access token
 POST	/auth/logout	Remove sessão e cookies
 POST	/auth/logout-all	Remove todas sessão e cookies
 GET	/generics/health-check	Retorna dados do usuário
-
+```bash
 📄 .env exemplo
-env
-Copy
-Edit
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/bases"
 JWT_SECRET="sua_chave_secreta"
 JWT_EXPIRES_IN="15m"
@@ -91,5 +86,6 @@ REFRESH_TOKEN_EXPIRES_IN="7d"
 npm run dev         # Inicia o servidor em modo desenvolvimento
 npm run build       # Compila o projeto para produção
 npm start       # Inicia o servidor em modo produção
+```
 📝 Licença
 Este projeto está sob a licença MIT.
