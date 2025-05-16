@@ -1,0 +1,12 @@
+{
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "prettier/prettier": "off",
+    "no-useless-constructor": "off",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-var-requires": "off"
+  },
+  "extends": "@rocketseat/eslint-config/node"
+}

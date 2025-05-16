@@ -1,0 +1,2 @@
+export { registerPrisma } from './prisma';
+
