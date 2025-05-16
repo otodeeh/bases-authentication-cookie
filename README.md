@@ -5,7 +5,7 @@ Este projeto é uma API backend modular desenvolvida em **TypeScript** utilizand
 ---
 
 ## 📁 Estrutura do Projeto
-
+```root
 src/
 ├── application/ # Casos de uso (Use Cases)
 │ └── use-cases/
@@ -16,10 +16,7 @@ src/
 ├── protocols/ # Protocolos e interfaces
 ├── routes/ # Rotas por domínio
 └── schemas/ # Schemas de validação
-
-yaml
-Copy
-Edit
+```
 
 ---
 
