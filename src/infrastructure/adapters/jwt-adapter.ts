@@ -11,6 +11,11 @@ export class JwtAdapter {
     return accessToken;
   }
 
+  decode(token: string): string {
+    const value: any = jwt.decode(token);
+    return value;
+  }
+
   decrypt(token: string): string {
     const value: any = jwt.verify(token, env.jwt.secret);
     return value;

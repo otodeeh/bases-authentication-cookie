@@ -5,7 +5,7 @@ export const loggerMiddleware = async (req: FastifyRequest) => {
     const { body, method, originalUrl, headers } = req;
     const { authorization } = headers;
     const token = authorization?.split(" ")[1];
-    const data: any = token ? new JwtAdapter().decrypt(token) : { id: '' };
+    const data: any = token ? new JwtAdapter().decode(token) : { id: '' };
     const { id: userId } = data;
 
     console.log('--------------------------------------------Logger---------------------------------------------------');
