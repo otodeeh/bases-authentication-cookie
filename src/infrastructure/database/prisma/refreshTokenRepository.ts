@@ -1,38 +1,49 @@
-import { AddRefreshToken, IRefreshTokenRepository, RevokeAllRefreshTokens, RevokePreviousRefreshToken, RevokeRefreshToken, ValidateRefreshToken } from "@/domain/repositories/iRefreshTokenRepository";
+import { AddRefreshToken, IRefreshTokenRepository } from "@/domain/repositories";
+import { RevokeAllRefreshTokens, RevokePreviousRefreshToken, RevokeRefreshToken, ValidateRefreshToken } from "@/domain/repositories/iRefreshTokenRepository";
 import { PrismaClient } from "@prisma/client";
 
 export class RefreshTokenRepository implements IRefreshTokenRepository {
-    constructor(private readonly prisma: PrismaClient) {}
-
-    async add(params: AddRefreshToken.Params): Promise<any> {
+    constructor (private readonly prisma: PrismaClient) {}
+    
+    async add(params: AddRefreshToken.Params): Promise<void> {
         const { userId, deviceId } = params;
-
-        await this.prisma.refreshToken.updateMany({
-            where: { userId, deviceId, revoked: false },
-            data: { revoked: true, revokedAt: new Date() }
+        
+        const previousRefreshToken = await this.prisma.refreshToken.findFirst({
+            where: { userId, deviceId, revoked: false, revokedAt: null },
+            orderBy: { createdAt: "desc" }
         });
 
-        await this.prisma.refreshToken.create({
+        const refreshToken = await this.prisma.refreshToken.create({
             data: params
         });
+
+        if (previousRefreshToken) {
+            await this.prisma.refreshToken.update({
+                where: { id: previousRefreshToken?.id },
+                data: { revoked: true, revokedAt: new Date(), replacedById: refreshToken?.id }
+            });
+        }
     }
 
     async validateRefreshToken(refreshToken: ValidateRefreshToken.Params): Promise<ValidateRefreshToken.Return> {
-        const record = await this.prisma.refreshToken.findFirst({ where: { tokenHash: refreshToken }, include: { user: true } });
+        const record = await this.prisma.refreshToken.findFirst({ 
+            where: { tokenHash: refreshToken }, 
+            include: { 
+                user: { 
+                    select: { id: true, name: true, email: true } 
+                } 
+            } 
+        });
 
         if (!record || record?.revoked || record?.expiresAt < new Date()) {
             return null;
         }
 
-        if (record?.replacedById) {
-            await this.revokeAllRefreshTokens(record?.userId);
-            return null;
-        }
-
-        return {
+        return { 
             id: record?.user?.id,
             name: record?.user?.name,
-            email: record?.user?.email
+            email: record?.user?.email,
+            deviceId: record?.deviceId
         }
     }
 

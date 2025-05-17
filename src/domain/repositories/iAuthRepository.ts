@@ -7,5 +7,8 @@ export namespace AuthLogin {
 
 export namespace AuthValidateToken {
     export type Params = string;
-    export type Return = string | null;
+    export type Return = {
+        accessToken: string;
+        refreshToken: string;
+    };
 }

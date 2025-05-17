@@ -39,8 +39,6 @@ model RefreshToken {
 
   replacedBy RefreshToken? @relation("TokenRotation", fields: [replacedById], references: [id])
   replaced   RefreshToken? @relation("TokenRotation")
-
-  @@unique([userId, deviceId])
 }
 
 model UserNotificationConfig {
@@ -109,4 +107,15 @@ model ErrorLog {
   createdAt DateTime @default(now())
   context   String
   error     Json
+}
+
+model File {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  deletedAt   DateTime?
+  description String?
+  extension   String
+  url         String
+  relatedType String // Ex: "User", "Order", "Product"
+  relatedId   String // ID da entidade relacionada
 }

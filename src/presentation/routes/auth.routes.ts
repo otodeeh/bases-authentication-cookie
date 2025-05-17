@@ -17,7 +17,6 @@ export function authRoutes(app: FastifyTypedInstance) {
         handler: routeAdapter(new AuthLoginController()),
     });
     app.get('/refresh', {
-        preHandler: authMiddleware,
         schema: {
             tags: ['auth'],
             description: 'Validate access tokens',

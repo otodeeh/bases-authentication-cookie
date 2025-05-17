@@ -8,23 +8,18 @@ export class ValidateRefreshTokenController implements Controller {
 
     async handle(request: HttpRequest): Promise<HttpResponse> {
         try {
-            if (!request?.cookies?.refreshToken) {
-                return { 
-                    statusCode: 404, 
-                    body: "RefreshToken not found" 
-                } 
-            } 
+            if (!request?.cookies?.refreshToken) return { statusCode: 404, body: "RefreshToken not found" };
 
             const { refreshToken } = request.cookies;
             const refreshTokenRepo = new RefreshTokenRepository(prismaClient);
             const jwt = new JwtAdapter();
             const refreshTokenUseCase = new ValidateRefreshTokenUseCase(refreshTokenRepo, jwt);
-            const accessToken = await refreshTokenUseCase.execute(refreshToken);
+            const refreshTokenData = await refreshTokenUseCase.execute(refreshToken);
 
             return {
                 statusCode: 200,
-                cookies: { refreshToken },
-                body: { accessToken }
+                cookies: { refreshToken: refreshTokenData?.refreshToken },
+                body: { accessToken: refreshTokenData?.accessToken }
             }
         } catch (error) {
             console.error({ error });

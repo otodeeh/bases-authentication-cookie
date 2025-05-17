@@ -23,6 +23,7 @@ export namespace ValidateRefreshToken {
         id: string;
         name: string;
         email: string;
+        deviceId:string;
     } | null;
 }
 
